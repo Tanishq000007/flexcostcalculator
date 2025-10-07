@@ -11,7 +11,6 @@ const materialRates = {
   "sunboard": 50,
   "radium sunboard": 55
 };
-
 const frameRates = { "1kg": 10, "2kg": 20, "3kg": 30 };
 const laminationRates = { "gloss": 10, "matte": 12 };
 const addonRates = { "Illet": 0 };
@@ -29,23 +28,33 @@ function calculate() {
   const frame = document.getElementById("frameType").value;
   const illet = document.getElementById("illet").checked;
   const designing = parseFloat(document.getElementById("designingCharges").value) || 0;
+  const gstChecked = document.getElementById("gstCheck").checked;
 
   const lam = document.querySelector('input[name="lam"]:checked').value;
 
   const area = w * h;
   const matRate = materialRates[material];
   const matCost = area * qty * matRate;
-
   const frameCost = frame ? (frameRates[frame] * qty) : 0;
   const lamCost = lam !== "none" ? laminationRates[lam] * area * qty : 0;
   const illetCost = illet ? addonRates["Illet"] * qty : 0;
 
-  const total = matCost + frameCost + lamCost + illetCost + designing;
+  let subtotal = matCost + frameCost + lamCost + illetCost + designing;
+  let gstAmount = gstChecked ? subtotal * 0.18 : 0;
+  let total = subtotal + gstAmount;
 
   const html = `
-    <h3>Quotation</h3>
-    <p><strong>Customer:</strong> ${customer}<br>
-    <strong>Date:</strong> ${date}</p>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <h3>Vimal Press</h3>
+        <p>Flex Printing Quotation</p>
+        <p><strong>Customer:</strong> ${customer}<br>
+        <strong>Date:</strong> ${date}</p>
+      </div>
+      <div>
+        <img src="logo.png" alt="Logo" />
+      </div>
+    </div>
 
     <table>
       <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
@@ -54,6 +63,7 @@ function calculate() {
       ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
       ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
       <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
+      ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
       <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
     </table>
   `;
@@ -77,5 +87,3 @@ async function downloadPDF() {
   pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight);
   pdf.save(fileName);
 }
-
-
