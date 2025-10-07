@@ -1,61 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flex Printing Rate Calculator | Vimal Press</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flex Printing Calculator — Vimal Press</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Fonts (optional) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>🖨️ Flex Printing Rate Calculator</h1>
-    <div class="form-section">
-      <label>Customer Name:</label>
-      <input type="text" id="customerName" placeholder="Enter name" />
-
-      <label>Date:</label>
-      <input type="date" id="date" />
-
-      <label>Width (ft):</label>
-      <input type="number" id="width" placeholder="Width" />
-
-      <label>Height (ft):</label>
-      <input type="number" id="height" placeholder="Height" />
-
-      <label>Quantity:</label>
-      <input type="number" id="quantity" placeholder="Quantity" />
-
-      <label>Material Type:</label>
-      <select id="materialType">
-        <option value="Standard Flex">Standard Flex</option>
-        <option value="Premium Flex">Premium Flex</option>
-        <option value="Vinyl Flex">Vinyl Flex</option>
-      </select>
-
-      <label>Printing Type:</label>
-      <select id="printingType">
-        <option value="Full Color">Full Color</option>
-        <option value="Single Color">Single Color</option>
-      </select>
-
-      <label>Add-ons:</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" value="Grommets" /> Grommets</label>
-        <label><input type="checkbox" value="Frames" /> Frames</label>
-        <label><input type="checkbox" value="Special Finish" /> Special Finish</label>
+    <header class="header">
+      <div>
+        <h1>Vimal Press</h1>
+        <p class="muted">Flex Printing Quotation</p>
       </div>
+      <div class="business-info">
+        <p>Mathura, Uttar Pradesh</p>
+        <p>Phone: <!-- add phone if desired --> </p>
+      </div>
+    </header>
 
-      <label><input type="checkbox" id="lamination" /> Lamination</label>
+    <main class="main-grid">
+      <section class="form-card">
+        <h2>Quotation Inputs</h2>
 
-      <label>Designing Charges (₹):</label>
-      <input type="number" id="designingCharges" placeholder="Enter designing charge" />
+        <label>Customer Name
+          <input id="customerName" type="text" placeholder="Customer name" />
+        </label>
 
-      <button onclick="calculateQuotation()">Calculate</button>
-    </div>
+        <label>Date
+          <input id="date" type="date" />
+        </label>
 
-    <div id="quotationResult" class="result-section"></div>
+        <div class="row">
+          <label>Width (ft)
+            <input id="width" type="number" step="0.01" min="0" placeholder="eg. 4" />
+          </label>
+          <label>Height (ft)
+            <input id="height" type="number" step="0.01" min="0" placeholder="eg. 6" />
+          </label>
+          <label>Quantity
+            <input id="quantity" type="number" step="1" min="1" value="1" />
+          </label>
+        </div>
+
+        <label>Material Type
+          <select id="materialType">
+            <!-- materials (exact names you provided) -->
+            <option>White Back</option>
+            <option>Black Back</option>
+            <option>White backside</option>
+            <option>Star</option>
+            <option>star backside</option>
+            <option>Back Light</option>
+            <option>vnyle</option>
+            <option>oneway</option>
+            <option>radium</option>
+            <option>sunboard</option>
+            <option>radium sunboard</option>
+          </select>
+        </label>
+
+        <label>Printing Type
+          <select id="printingType">
+            <option>Full Color</option>
+            <option>Single Color</option>
+          </select>
+        </label>
+
+        <label>Frame Type (optional)
+          <select id="frameType">
+            <option value="">None</option>
+            <option value="1kg">1kg</option>
+            <option value="2kg">2kg</option>
+            <option value="3kg">3kg</option>
+          </select>
+        </label>
+
+        <div class="checkbox-row">
+          <label><input type="checkbox" id="illet" /> Illets (complementary)</label>
+        </div>
+
+        <fieldset class="lamination-fieldset">
+          <legend>Lamination (choose one)</legend>
+          <label><input type="radio" name="lam" value="none" checked /> None</label>
+          <label><input type="radio" name="lam" value="gloss" /> Gloss</label>
+          <label><input type="radio" name="lam" value="matte" /> Matte</label>
+        </fieldset>
+
+        <label>Designing Charges (₹)
+          <input id="designingCharges" type="number" min="0" step="0.01" value="0" />
+        </label>
+
+        <div class="buttons">
+          <button id="calcBtn">Calculate</button>
+          <button id="downloadPdfBtn" disabled>Download Quotation as PDF</button>
+        </div>
+
+        <p class="small muted">Tip: Fill inputs then click Calculate. Then download PDF.</p>
+      </section>
+
+      <section class="result-card" id="quotationArea">
+        <!-- Quotation will be generated here -->
+        <div id="quotationResult" class="quotation-result placeholder">
+          <p>Quotation will appear here after calculation.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer muted">
+      <small>Built for Vimal Press — Flex printing quotation tool</small>
+    </footer>
   </div>
+
+  <!-- Libraries for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    integrity="sha512-BNa5u2q8Qz1s9h7u8yq+XhR6Ad4N5wN3gk+fOQbX3b0MZkKQcG4Vh1Nn3c5h1FAd0Y6rFJf3cQ1b7H1c6q5m0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+    integrity="sha512-7hQ0aAq9sZxH3k2pF2l9w5bQZf9v7rQm6yV3R1n9M6xQ2zK2z5Q7s6P8u3aY1D2g5b9jV6wQ4r9k1mN8t6Yqg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script src="script.js"></script>
 </body>
 </html>
+
