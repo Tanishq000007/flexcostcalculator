@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flex Printing Rate Calculator | Vimal Press</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🖨️ Flex Printing Rate Calculator</h1>
+    <div class="form-section">
+      <label>Customer Name:</label>
+      <input type="text" id="customerName" placeholder="Enter name" />
+
+      <label>Date:</label>
+      <input type="date" id="date" />
+
+      <label>Width (ft):</label>
+      <input type="number" id="width" placeholder="Width" />
+
+      <label>Height (ft):</label>
+      <input type="number" id="height" placeholder="Height" />
+
+      <label>Quantity:</label>
+      <input type="number" id="quantity" placeholder="Quantity" />
+
+      <label>Material Type:</label>
+      <select id="materialType">
+        <option value="Standard Flex">Standard Flex</option>
+        <option value="Premium Flex">Premium Flex</option>
+        <option value="Vinyl Flex">Vinyl Flex</option>
+      </select>
+
+      <label>Printing Type:</label>
+      <select id="printingType">
+        <option value="Full Color">Full Color</option>
+        <option value="Single Color">Single Color</option>
+      </select>
+
+      <label>Add-ons:</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" value="Grommets" /> Grommets</label>
+        <label><input type="checkbox" value="Frames" /> Frames</label>
+        <label><input type="checkbox" value="Special Finish" /> Special Finish</label>
+      </div>
+
+      <label><input type="checkbox" id="lamination" /> Lamination</label>
+
+      <label>Designing Charges (₹):</label>
+      <input type="number" id="designingCharges" placeholder="Enter designing charge" />
+
+      <button onclick="calculateQuotation()">Calculate</button>
+    </div>
+
+    <div id="quotationResult" class="result-section"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
