@@ -43,36 +43,38 @@ function calculate() {
   let gstAmount = gstChecked ? subtotal * 0.18 : 0;
   let total = subtotal + gstAmount;
 
-const html = `
-  <div style="display:flex;justify-content:space-between;align-items:flex-start">
-    <div>
-      <h3>Vimal Press</h3>
-      <p>Flex Printing Quotation</p>
-      <p><strong>Customer:</strong> ${customer}<br>
-      <strong>Date:</strong> ${date}</p>
+  const html = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <h3>Vimal Press</h3>
+        <p>Flex Printing Quotation</p>
+        <p><strong>Customer:</strong> ${customer}<br>
+        <strong>Date:</strong> ${date}</p>
+      </div>
+      <div>
+        <img src="logo.png" alt="Logo" style="max-height:80px;" />
+      </div>
     </div>
-    <div>
-      <img src="logo.png" alt="Logo" />
+
+    <table>
+      <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
+      <tr><td>Material</td><td>${material} (${area} sq.ft × ${qty})</td><td>${matCost.toFixed(2)}</td></tr>
+      ${frame ? `<tr><td>Frame (${frame})</td><td>${qty} pcs</td><td>${frameCost.toFixed(2)}</td></tr>` : ""}
+      ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
+      ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
+      <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
+      ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
+      <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
+    </table>
+
+    <div style="margin-top:15px;padding:10px;border:1px solid #999;border-radius:6px;background:#f9f9f9;font-style:italic;font-size:0.95em;">
+      Rates valid for 15 days from the date of quotation.
     </div>
-  </div>
+  `;
 
-  <table>
-    <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
-    <tr><td>Material</td><td>${material} (${area} sq.ft × ${qty})</td><td>${matCost.toFixed(2)}</td></tr>
-    ${frame ? `<tr><td>Frame (${frame})</td><td>${qty} pcs</td><td>${frameCost.toFixed(2)}</td></tr>` : ""}
-    ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
-    ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
-    <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
-    ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
-    <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
-  </table>
-
-  <!-- Note in a visible box -->
-  <div style="margin-top:15px;padding:10px;border:1px solid #999;border-radius:6px;background:#f9f9f9;font-style:italic;font-size:0.95em;">
-    Rates valid for 15 days from the date of quotation.
-  </div>
-`;
-
+  document.getElementById("quotationResult").innerHTML = html;
+  document.getElementById("downloadPdfBtn").disabled = false;
+}
 
 async function downloadPDF() {
   const customer = document.getElementById("customerName").value || "Customer";
@@ -80,21 +82,22 @@ async function downloadPDF() {
 
   const element = document.getElementById("quotationResult");
 
-  // Use html2canvas to capture the element
+  // Capture HTML as canvas
   const canvas = await html2canvas(element, {
-    scale: 3,            // higher scale for better quality
-    useCORS: true,       // if logo is from a local file
+    scale: 3,
+    useCORS: true,
     scrollY: -window.scrollY
   });
 
   const imgData = canvas.toDataURL("image/png");
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "pt", "a4");
+
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
 
   const imgProps = pdf.getImageProperties(imgData);
-  const imgWidth = pageWidth - 40; // margins
+  const imgWidth = pageWidth - 40;
   const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
 
   let heightLeft = imgHeight;
@@ -103,7 +106,6 @@ async function downloadPDF() {
   pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
   heightLeft -= pageHeight - 40;
 
-  // Handle multipage if needed
   while (heightLeft > 0) {
     position = heightLeft - imgHeight + 20;
     pdf.addPage();
@@ -113,4 +115,3 @@ async function downloadPDF() {
 
   pdf.save(fileName);
 }
-
