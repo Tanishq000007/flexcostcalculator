@@ -43,38 +43,36 @@ function calculate() {
   let gstAmount = gstChecked ? subtotal * 0.18 : 0;
   let total = subtotal + gstAmount;
 
-  const html = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <h3>Vimal Press</h3>
-        <p>Flex Printing Quotation</p>
-        <p><strong>Customer:</strong> ${customer}<br>
-        <strong>Date:</strong> ${date}</p>
-      </div>
-      <div>
-        <img src="logo.png" alt="Logo" />
-      </div>
+const html = `
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <h3>Vimal Press</h3>
+      <p>Flex Printing Quotation</p>
+      <p><strong>Customer:</strong> ${customer}<br>
+      <strong>Date:</strong> ${date}</p>
     </div>
+    <div>
+      <img src="logo.png" alt="Logo" />
+    </div>
+  </div>
 
-    <table>
-      <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
-      <tr><td>Material</td><td>${material} (${area} sq.ft × ${qty})</td><td>${matCost.toFixed(2)}</td></tr>
-      ${frame ? `<tr><td>Frame (${frame})</td><td>${qty} pcs</td><td>${frameCost.toFixed(2)}</td></tr>` : ""}
-      ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
-      ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
-      <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
-      ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
-      <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
-    </table>
+  <table>
+    <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
+    <tr><td>Material</td><td>${material} (${area} sq.ft × ${qty})</td><td>${matCost.toFixed(2)}</td></tr>
+    ${frame ? `<tr><td>Frame (${frame})</td><td>${qty} pcs</td><td>${frameCost.toFixed(2)}</td></tr>` : ""}
+    ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
+    ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
+    <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
+    ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
+    <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
+  </table>
 
-    <p style="margin-top:10px;font-style:italic;font-size:0.9em;">
-      Rates valid for 15 days from the date of quotation.
-    </p>
-  `;
+  <!-- Note in a visible box -->
+  <div style="margin-top:15px;padding:10px;border:1px solid #999;border-radius:6px;background:#f9f9f9;font-style:italic;font-size:0.95em;">
+    Rates valid for 15 days from the date of quotation.
+  </div>
+`;
 
-  document.getElementById("quotationResult").innerHTML = html;
-  document.getElementById("downloadPdfBtn").disabled = false;
-}
 
 async function downloadPDF() {
   const customer = document.getElementById("customerName").value || "Customer";
