@@ -79,13 +79,38 @@ async function downloadPDF() {
   const fileName = `quotation-${customer.replace(/\s+/g, '-')}.pdf`;
 
   const element = document.getElementById("quotationResult");
-  const canvas = await html2canvas(element, { scale: 2 });
+
+  // Use html2canvas to capture the element
+  const canvas = await html2canvas(element, {
+    scale: 3,            // higher scale for better quality
+    useCORS: true,       // if logo is from a local file
+    scrollY: -window.scrollY
+  });
+
   const imgData = canvas.toDataURL("image/png");
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF("p", "pt", "a4");
   const pageWidth = pdf.internal.pageSize.getWidth();
-  const imgWidth = pageWidth - 40;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight);
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgProps = pdf.getImageProperties(imgData);
+  const imgWidth = pageWidth - 40; // margins
+  const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+  let heightLeft = imgHeight;
+  let position = 20;
+
+  pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight - 40;
+
+  // Handle multipage if needed
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight + 20;
+    pdf.addPage();
+    pdf.addImage(imgData, "PNG", 20, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight - 40;
+  }
+
   pdf.save(fileName);
 }
+
