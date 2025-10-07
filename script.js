@@ -66,6 +66,10 @@ function calculate() {
       ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
       <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
     </table>
+
+    <p style="margin-top:10px;font-style:italic;font-size:0.9em;">
+      Rates valid for 15 days from the date of quotation.
+    </p>
   `;
 
   document.getElementById("quotationResult").innerHTML = html;
