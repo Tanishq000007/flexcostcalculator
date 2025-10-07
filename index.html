@@ -1,93 +1,76 @@
-const materialRates = {
-  "White Back": 5,
-  "Black Back": 10,
-  "White backside": 15,
-  "Star": 20,
-  "star backside": 25,
-  "Back Light": 30,
-  "vnyle": 35,
-  "oneway": 40,
-  "radium": 45,
-  "sunboard": 50,
-  "radium sunboard": 55
-};
-const frameRates = { "1kg": 10, "2kg": 20, "3kg": 30 };
-const laminationRates = { "gloss": 10, "matte": 12 };
-const addonRates = { "Illet": 0 };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vimal Press Quotation</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Vimal Press — Flex Printing Quotation</h1>
 
-document.getElementById("calcBtn").addEventListener("click", calculate);
-document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
+    <label>Customer Name <input type="text" id="customerName" /></label>
+    <label>Date <input type="date" id="date" /></label>
 
-function calculate() {
-  const customer = document.getElementById("customerName").value || "Customer";
-  const date = document.getElementById("date").value || new Date().toLocaleDateString();
-  const w = parseFloat(document.getElementById("width").value) || 0;
-  const h = parseFloat(document.getElementById("height").value) || 0;
-  const qty = parseInt(document.getElementById("quantity").value) || 1;
-  const material = document.getElementById("materialType").value;
-  const frame = document.getElementById("frameType").value;
-  const illet = document.getElementById("illet").checked;
-  const designing = parseFloat(document.getElementById("designingCharges").value) || 0;
-  const gstChecked = document.getElementById("gstCheck").checked;
-
-  const lam = document.querySelector('input[name="lam"]:checked').value;
-
-  const area = w * h;
-  const matRate = materialRates[material];
-  const matCost = area * qty * matRate;
-  const frameCost = frame ? (frameRates[frame] * qty) : 0;
-  const lamCost = lam !== "none" ? laminationRates[lam] * area * qty : 0;
-  const illetCost = illet ? addonRates["Illet"] * qty : 0;
-
-  let subtotal = matCost + frameCost + lamCost + illetCost + designing;
-  let gstAmount = gstChecked ? subtotal * 0.18 : 0;
-  let total = subtotal + gstAmount;
-
-  const html = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <h3>Vimal Press</h3>
-        <p>Flex Printing Quotation</p>
-        <p><strong>Customer:</strong> ${customer}<br>
-        <strong>Date:</strong> ${date}</p>
-      </div>
-      <div>
-        <img src="logo.png" alt="Logo" />
-      </div>
+    <div class="row">
+      <label>Width (ft) <input type="number" id="width" step="0.01" /></label>
+      <label>Height (ft) <input type="number" id="height" step="0.01" /></label>
+      <label>Quantity <input type="number" id="quantity" value="1" /></label>
     </div>
 
-    <table>
-      <tr><th>Item</th><th>Details</th><th>Amount (₹)</th></tr>
-      <tr><td>Material</td><td>${material} (${area} sq.ft × ${qty})</td><td>${matCost.toFixed(2)}</td></tr>
-      ${frame ? `<tr><td>Frame (${frame})</td><td>${qty} pcs</td><td>${frameCost.toFixed(2)}</td></tr>` : ""}
-      ${lam !== "none" ? `<tr><td>Lamination (${lam})</td><td>${area * qty} sq.ft</td><td>${lamCost.toFixed(2)}</td></tr>` : ""}
-      ${illet ? `<tr><td>Illets</td><td>Complementary</td><td>${illetCost.toFixed(2)}</td></tr>` : ""}
-      <tr><td>Designing Charges</td><td>-</td><td>${designing.toFixed(2)}</td></tr>
-      ${gstChecked ? `<tr><td>GST 18%</td><td>-</td><td>${gstAmount.toFixed(2)}</td></tr>` : ""}
-      <tr><th colspan="2">Grand Total</th><th>₹${total.toFixed(2)}</th></tr>
-    </table>
+    <label>Material
+      <select id="materialType">
+        <option>White Back</option>
+        <option>Black Back</option>
+        <option>White backside</option>
+        <option>Star</option>
+        <option>star backside</option>
+        <option>Back Light</option>
+        <option>vnyle</option>
+        <option>oneway</option>
+        <option>radium</option>
+        <option>sunboard</option>
+        <option>radium sunboard</option>
+      </select>
+    </label>
 
-    <p style="margin-top:10px;font-style:italic;font-size:0.9em;">
-      Rates valid for 15 days from the date of quotation.
-    </p>
-  `;
+    <label>Frame Type (optional)
+      <select id="frameType">
+        <option value="">None</option>
+        <option value="1kg">1kg</option>
+        <option value="2kg">2kg</option>
+        <option value="3kg">3kg</option>
+      </select>
+    </label>
 
-  document.getElementById("quotationResult").innerHTML = html;
-  document.getElementById("downloadPdfBtn").disabled = false;
-}
+    <label><input type="checkbox" id="illet" /> Illets (complementary)</label>
 
-async function downloadPDF() {
-  const customer = document.getElementById("customerName").value || "Customer";
-  const fileName = `quotation-${customer.replace(/\s+/g, '-')}.pdf`;
+    <fieldset>
+      <legend>Lamination</legend>
+      <label><input type="radio" name="lam" value="none" checked /> None</label>
+      <label><input type="radio" name="lam" value="gloss" /> Gloss</label>
+      <label><input type="radio" name="lam" value="matte" /> Matte</label>
+    </fieldset>
 
-  const element = document.getElementById("quotationResult");
-  const canvas = await html2canvas(element, { scale: 2 });
-  const imgData = canvas.toDataURL("image/png");
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "pt", "a4");
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const imgWidth = pageWidth - 40;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight);
-  pdf.save(fileName);
-}
+    <label>Designing Charges (₹)
+      <input id="designingCharges" type="number" value="0" />
+    </label>
+
+    <label><input type="checkbox" id="gstCheck" /> Include GST 18%</label>
+
+    <div class="buttons">
+      <button id="calcBtn">Calculate</button>
+      <button id="downloadPdfBtn" disabled>Download PDF</button>
+    </div>
+
+    <div id="quotationResult" class="result"></div>
+  </div>
+
+  <!-- Required libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
