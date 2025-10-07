@@ -15,8 +15,10 @@ const frameRates = { "1kg": 10, "2kg": 20, "3kg": 30 };
 const laminationRates = { "gloss": 10, "matte": 12 };
 const addonRates = { "Illet": 0 };
 
-document.getElementById("calcBtn").addEventListener("click", calculate);
-document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("calcBtn").addEventListener("click", calculate);
+  document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
+});
 
 function calculate() {
   const customer = document.getElementById("customerName").value || "Customer";
@@ -29,7 +31,6 @@ function calculate() {
   const illet = document.getElementById("illet").checked;
   const designing = parseFloat(document.getElementById("designingCharges").value) || 0;
   const gstChecked = document.getElementById("gstCheck").checked;
-
   const lam = document.querySelector('input[name="lam"]:checked').value;
 
   const area = w * h;
@@ -82,7 +83,6 @@ async function downloadPDF() {
 
   const element = document.getElementById("quotationResult");
 
-  // Capture HTML as canvas
   const canvas = await html2canvas(element, {
     scale: 3,
     useCORS: true,
@@ -95,7 +95,6 @@ async function downloadPDF() {
 
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-
   const imgProps = pdf.getImageProperties(imgData);
   const imgWidth = pageWidth - 40;
   const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
