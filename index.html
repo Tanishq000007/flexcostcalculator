@@ -19,6 +19,9 @@
       <label>Height (in inches):</label>
       <input type="number" id="height" required />
 
+      <label>Quantity:</label>
+      <input type="number" id="quantity" value="1" min="1" />
+
       <label>Material:</label>
       <select id="material">
         <option value="5">White Back - ₹5</option>
@@ -43,18 +46,22 @@
         <option value="30">3kg - ₹30</option>
       </select>
 
-      <label>Add-ons:</label>
-      <select id="addons">
-        <option value="0">Illets (Free)</option>
+      <label>Lamination:</label>
+      <select id="lamination">
+        <option value="0">None</option>
+        <option value="10">Gloss - ₹10/sq inch</option>
+        <option value="12">Matte - ₹12/sq inch</option>
       </select>
 
-      <label>Lamination:</label><br />
-      <input type="checkbox" id="gloss" value="10" /> Gloss (₹10/sq inch)
-      <input type="checkbox" id="matte" value="12" /> Matte (₹12/sq inch)
+      <label>Add-ons:</label><br />
+      <input type="checkbox" id="eyelets" value="0" /> Eyelets (Free)
       <br /><br />
 
       <label>Designing Charges (₹):</label>
       <input type="number" id="designing" />
+
+      <label>Remark:</label>
+      <textarea id="remark" placeholder="Enter any remark for the quotation"></textarea>
 
       <label>Apply GST (18%)?</label>
       <input type="checkbox" id="gst" />
