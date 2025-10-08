@@ -48,55 +48,51 @@ function calculate() {
   const today = new Date().toLocaleDateString();
 
   document.getElementById("quotation").innerHTML = `
-    <img src="logo.png" class="logo" alt="Logo" />
-    <h2>Quotation</h2>
-    <p><strong>Customer:</strong> ${name}</p>
-    <p><strong>Date:</strong> ${today}</p>
-    <p><strong>Size:</strong> ${width}" × ${height}" (${areaSqInch.toFixed(0)} sq.in)</p>
-    <p><strong>Quantity:</strong> ${quantity}</p>
-    <table>
-      <tr><th>Description</th><th>Amount (₹)</th></tr>
-      <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
-      <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
-      <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
-      <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
-      <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
-      <tr><td><strong>Subtotal</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
-      ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
-      <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
-    </table>
-
-    ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
-
-    <p class="note">Note: Rates valid for 15 days from quotation date.</p>
-
-    <div class="footer">
-      <strong>Contact:</strong><br>
-      Sumit Mittal, Namit Mittal<br>
-      9368885855, 9359995855<br>
-      vimalpress@gmail.com<br>
-      vimalpress.com<br>
-      <br>Thank you for choosing us!
-    </div>
-
-    <div class="signature">
-      ___________________________<br>
-      Authorized Signature
+    <div id="pdfContent">
+      <img src="logo.png" class="logo" alt="Logo" />
+      <h2>Quotation</h2>
+      <p><strong>Customer:</strong> ${name}</p>
+      <p><strong>Date:</strong> ${today}</p>
+      <p><strong>Size:</strong> ${width}" × ${height}" (${areaSqInch.toFixed(0)} sq.in)</p>
+      <p><strong>Quantity:</strong> ${quantity}</p>
+      <table>
+        <tr><th>Description</th><th>Amount (₹)</th></tr>
+        <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
+        <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
+        <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
+        <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
+        <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
+        <tr><td><strong>Subtotal</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
+        ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
+        <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
+      </table>
+      ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
+      <p class="note">Note: Rates valid for 15 days from quotation date.</p>
+      <div class="footer">
+        <strong>Contact:</strong><br>
+        Sumit Mittal, Namit Mittal<br>
+        9368885855, 9359995855<br>
+        vimalpress@gmail.com<br>
+        vimalpress.com<br>
+        <br>Thank you for choosing us!
+      </div>
+      <div class="signature">
+        ___________________________<br>
+        Authorized Signature
+      </div>
     </div>
   `;
 }
 
-// Updated PDF download function to prevent blank PDF
 function downloadPDF() {
   const name = document.getElementById("customerName").value || "Customer";
-  const element = document.getElementById("quotation");
+  const element = document.getElementById("pdfContent");
 
-  if (!element.innerHTML.trim()) {
+  if (!element || !element.innerHTML.trim()) {
     alert("Please calculate the quotation first!");
     return;
   }
 
-  // Small delay ensures html2canvas renders all content
   setTimeout(() => {
     const opt = {
       margin: 10,
