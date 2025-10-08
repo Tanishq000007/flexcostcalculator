@@ -35,7 +35,6 @@ function calculate() {
   }
 
   const areaSqInch = width * height;
-
   const materialCost = areaSqInch * materialValue;
   const frameCost = areaSqInch * frameValue;
   const laminationCost = areaSqInch * laminationValue;
@@ -44,7 +43,6 @@ function calculate() {
   let subtotal = singleTotal * quantity;
   const gst = gstChecked ? subtotal * 0.18 : 0;
   const total = subtotal + gst;
-
   const today = new Date().toLocaleDateString();
 
   document.getElementById("quotation").innerHTML = `
@@ -84,4 +82,30 @@ function calculate() {
       </div>
 
       <div class="signature">
-        ___________________________<br
+        ___________________________<br>
+        Authorized Signature
+      </div>
+    </div>
+  `;
+}
+
+function downloadPDF() {
+  const name = document.getElementById("customerName").value || "Customer";
+  const element = document.getElementById("pdfContent");
+
+  if (!element || !element.innerHTML.trim()) {
+    alert("Please calculate the quotation first!");
+    return;
+  }
+
+  setTimeout(() => {
+    const opt = {
+      margin: 10,
+      filename: `quotation-${name}.pdf`,
+      image: { type: 'png', quality: 1 },
+      html2canvas: { scale: 2, useCORS: true, allowTaint: true, windowWidth: element.scrollWidth },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+  }, 500);
+}
