@@ -19,7 +19,7 @@ function calculateQuotation() {
     const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
 
     // Update Black Back rate to 0.83
-    if (materialName.includes("Black Back")) materialValue = 0.83;
+    if (materialName.includes("Black Back")) materialValue = 0.083;
 
     const frameDropdown = document.getElementById("frame");
     const frameValue = parseFloat(frameDropdown.value);
