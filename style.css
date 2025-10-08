@@ -59,55 +59,30 @@ button:hover {
   background: #fafafa;
 }
 
-.note {
-  margin-top: 20px;
-  font-style: italic;
-  color: #555;
+.quotation table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.quotation th, .quotation td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.quotation th {
+  background: #007bff;
+  color: white;
+  text-align: left;
 }
 
 .footer {
-  margin-top: 25px;
-  border-top: 1px solid #ccc;
-  padding-top: 10px;
+  margin-top: 20px;
   font-size: 14px;
-  color: #333;
-  line-height: 1.5;
 }
 
 .signature {
   margin-top: 40px;
   text-align: right;
   font-weight: bold;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-  font-size: 14px;
-}
-
-table th {
-  background: #007bff;
-  color: white;
-  padding: 8px;
-}
-
-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
-  text-align: right;
-}
-
-table td:first-child {
-  text-align: left;
-}
-
-#pdfContent {
-  margin: 0;
-  padding: 0;
-  display: block;
-  width: 100%;
-  position: relative;
-  overflow: visible;
 }
