@@ -18,7 +18,7 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const laminationName = laminationDropdown.options[laminationDropdown.selectedIndex].text;
 
     const eyeletsChecked = document.getElementById("eyelets").checked;
-    const addonsValue = eyeletsChecked ? parseFloat(document.getElementById("eyelets").value) : 0;
+    const addonsValue = 0; // Eyelets are free
     const addonsName = eyeletsChecked ? "Eyelets" : "None";
 
     const designing = parseFloat(document.getElementById("designing").value) || 0;
