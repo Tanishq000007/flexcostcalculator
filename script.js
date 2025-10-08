@@ -34,6 +34,7 @@ function calculateQuotation() {
   const addonsName = addonsDropdown.options[addonsDropdown.selectedIndex].text;
 
   const designing = parseFloat(document.getElementById("designing").value) || 0;
+  const discount = parseFloat(document.getElementById("discount").value) || 0;
   const remark = document.getElementById("remark").value;
 
   const area = width * height;
@@ -41,7 +42,12 @@ function calculateQuotation() {
   const frameCost = area * frameValue;
   const laminationCost = area * laminationValue;
   const addonsCost = area * addonsValue;
-  const total = (materialCost + frameCost + laminationCost + addonsCost + designing) * quantity;
+
+  // Subtotal excluding designing charges
+  const subtotal = (materialCost + frameCost + laminationCost + addonsCost) * quantity;
+
+  // Total = subtotal - discount + designing charges
+  const total = subtotal - discount + designing;
 
   const rupee = "₹";
 
@@ -58,14 +64,17 @@ function calculateQuotation() {
       <p><strong>Quantity:</strong> ${quantity}</p>
 
       <table style="width:100%; border-collapse: collapse;" border="1">
-        <tr><th>Description</th><th>Amount (${rupee})</th></tr>
-        <tr><td>Material (${materialName})</td><td>${rupee}${(materialCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Frame (${frameName})</td><td>${rupee}${(frameCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Lamination (${laminationName})</td><td>${rupee}${(laminationCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Add-ons (${addonsName})</td><td>${rupee}${(addonsCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Designing Charges</td><td>${rupee}${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>${rupee}${total.toFixed(2)}</strong></td></tr>
-      </table>
+  <tr><th>Description</th><th>Amount (${rupee})</th></tr>
+  <tr><td>Material (${materialName})</td><td>${rupee}${(materialCost * quantity).toFixed(2)}</td></tr>
+  <tr><td>Frame (${frameName})</td><td>${rupee}${(frameCost * quantity).toFixed(2)}</td></tr>
+  <tr><td>Lamination (${laminationName})</td><td>${rupee}${(laminationCost * quantity).toFixed(2)}</td></tr>
+  <tr><td>Add-ons (${addonsName})</td><td>${rupee}${(addonsCost * quantity).toFixed(2)}</td></tr>
+  <tr><td>Subtotal</td><td>${rupee}${subtotal.toFixed(2)}</td></tr>
+  <tr><td>Discount</td><td>-${rupee}${discount.toFixed(2)}</td></tr> <!-- always visible -->
+  <tr><td>Designing Charges</td><td>${rupee}${designing.toFixed(2)}</td></tr>
+  <tr><td><strong>Total</strong></td><td><strong>${rupee}${total.toFixed(2)}</strong></td></tr>
+</table>
+
 
       ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
 
