@@ -31,6 +31,7 @@ input, select, textarea, button {
   margin-top: 5px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -88,6 +89,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
+  font-size: 14px;
 }
 
 table th {
@@ -104,4 +106,13 @@ table td {
 
 table td:first-child {
   text-align: left;
+}
+
+/* PDF optimization */
+#pdfContent {
+  margin: 0;
+  padding: 0;
+  display: block;
+  position: relative;
+  width: 100%;
 }
