@@ -86,15 +86,25 @@ function calculate() {
   `;
 }
 
+// Updated PDF download function to prevent blank PDF
 function downloadPDF() {
   const name = document.getElementById("customerName").value || "Customer";
   const element = document.getElementById("quotation");
-  const opt = {
-    margin: 10,
-    filename: `quotation-${name}.pdf`,
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  };
-  html2pdf().set(opt).from(element).save();
+
+  if (!element.innerHTML.trim()) {
+    alert("Please calculate the quotation first!");
+    return;
+  }
+
+  // Small delay ensures html2canvas renders all content
+  setTimeout(() => {
+    const opt = {
+      margin: 10,
+      filename: `quotation-${name}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+    };
+    html2pdf().set(opt).from(element).save();
+  }, 500);
 }
