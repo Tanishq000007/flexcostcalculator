@@ -61,4 +61,50 @@ function calculate() {
       <table>
         <tr><th>Description</th><th>Amount (₹)</th></tr>
         <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Frame (${frameName})</
+        <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
+        <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
+        <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
+        <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
+        <tr><td><strong>Subtotal</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
+        ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
+        <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
+      </table>
+
+      ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
+      <p class="note">Note: Rates valid for 15 days from quotation date.</p>
+
+      <div class="footer">
+        <strong>Contact:</strong><br>
+        Sumit Mittal, Namit Mittal<br>
+        9368885855, 9359995855<br>
+        vimalpress@gmail.com<br>
+        vimalpress.com<br>
+        <br>Thank you for choosing us!
+      </div>
+
+      <div class="signature">
+        ___________________________<br>
+        Authorized Signature
+      </div>
+    </div>
+  `;
+}
+
+function downloadPDF() {
+  const name = document.getElementById("customerName").value || "Customer";
+  const element = document.getElementById("pdfContent");
+
+  if (!element || !element.innerHTML.trim()) {
+    alert("Please calculate the quotation first!");
+    return;
+  }
+
+  const opt = {
+    margin: 10,
+    filename: `quotation-${name}.pdf`,
+    image: { type: 'png', quality: 1 },
+    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
