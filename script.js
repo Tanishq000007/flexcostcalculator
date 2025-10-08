@@ -1,6 +1,5 @@
-// Event listeners
+// Event listener for Calculate button
 document.getElementById("calcBtn").addEventListener("click", calculate);
-document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
 
 let currentCustomerName = "quotation"; // default
 
@@ -58,7 +57,7 @@ function calculate() {
   const subtotal = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
   const quoteHTML = `
-    <div id="pdfContent" style="padding:10px; background:#fff; color:#000;">
+    <div style="padding:10px; background:#fff; color:#000;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Quotation</h2>
         <img src="logo.png" alt="Logo" style="width:100px; height:auto;">
@@ -97,20 +96,4 @@ function calculate() {
   `;
 
   document.getElementById("quotation").innerHTML = quoteHTML;
-}
-
-// Download PDF
-function downloadPDF() {
-  const element = document.getElementById("pdfContent");
-  if (!element || !element.innerHTML.trim()) {
-    alert("Please calculate the quotation first!");
-    return;
-  }
-
-  html2pdf().set({
-    margin: 10,
-    filename: `${currentCustomerName}.pdf`,
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#fff' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(element).save();
 }
