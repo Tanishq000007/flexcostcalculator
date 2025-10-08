@@ -1,15 +1,25 @@
-document.getElementById("calcBtn").addEventListener("click", function() {
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("calcBtn").addEventListener("click", calculateQuotation);
+});
+
+function calculateQuotation() {
     const name = document.getElementById("customerName").value.trim();
     const date = document.getElementById("quoteDate").value;
     const width = parseFloat(document.getElementById("width").value) || 0;
     const height = parseFloat(document.getElementById("height").value) || 0;
     const quantity = parseInt(document.getElementById("quantity").value) || 1;
 
+    if (!name || !date || width <= 0 || height <= 0) {
+        alert("Please fill all required fields with valid numbers!");
+        return;
+    }
+
     const materialDropdown = document.getElementById("material");
     let materialValue = parseFloat(materialDropdown.value);
     const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
 
-    if(materialName.includes("Black Back")) materialValue = 0.83;
+    // Update Black Back rate to 0.83
+    if (materialName.includes("Black Back")) materialValue = 0.83;
 
     const frameDropdown = document.getElementById("frame");
     const frameValue = parseFloat(frameDropdown.value);
@@ -20,23 +30,18 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const laminationName = laminationDropdown.options[laminationDropdown.selectedIndex].text;
 
     const eyeletsChecked = document.getElementById("eyelets").checked;
-    const addonsValue = 0; // eyelets free
+    const addonsValue = 0; // Eyelets are free
     const addonsName = eyeletsChecked ? "Eyelets" : "None";
 
     const designing = parseFloat(document.getElementById("designing").value) || 0;
     const remark = document.getElementById("remark").value;
-
-    if(!name || !date || width <= 0 || height <=0){
-        alert("Please fill all required fields with valid numbers!");
-        return;
-    }
 
     const area = width * height;
     const materialCost = area * materialValue;
     const frameCost = area * frameValue;
     const laminationCost = area * laminationValue;
 
-    // Designing charges affected by quantity
+    // Total = sum of all costs multiplied by quantity
     const total = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
     const quoteHTML = `
@@ -80,5 +85,4 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     `;
 
     document.getElementById("quotation").innerHTML = quoteHTML;
-});
-
+}
