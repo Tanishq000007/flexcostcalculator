@@ -24,7 +24,8 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const addonsValue = 0; // Eyelets are free
     const addonsName = eyeletsChecked ? "Eyelets" : "None";
 
-    let designing = parseFloat(document.getElementById("designing").value) || 0;
+    const designing = parseFloat(document.getElementById("designing").value) || 0;
+    const remark = document.getElementById("remark").value;
 
     if(!name || !date || width <= 0 || height <=0){
         alert("Please fill all required fields with valid numbers!");
@@ -35,10 +36,8 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const materialCost = area * materialValue;
     const frameCost = area * frameValue;
     const laminationCost = area * laminationValue;
-    const subtotalPerBanner = materialCost + frameCost + laminationCost + addonsValue + designing;
-    
-    // Now designing charges are multiplied by quantity
-    const total = (materialCost + frameCost + laminationCost + addonsValue) * quantity + (designing * quantity);
+
+    const total = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
     let html = `
         <h2>Quotation</h2>
@@ -57,7 +56,21 @@ document.getElementById("calcBtn").addEventListener("click", function() {
         <tr><td><strong>Total</strong></td><td><strong>${total.toFixed(2)}</strong></td></tr>
         </table>
 
-        ${document.getElementById("remark").value ? `<p><strong>Remark:</strong> ${document.getElementById("remark").value}</p>` : ''}
+        ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
+
+        <p style="font-style:italic; margin-top:10px;">Note: Rates valid for 15 days from quotation date.</p>
+
+        <div class="footer" style="margin-top:20px; font-size:14px;">
+          <strong>Contact:</strong><br>
+          Sumit Mittal, Namit Mittal<br>
+          9368885855, 9359995855<br>
+          vimalpress@gmail.com<br>
+          vimalpress.com
+        </div>
+
+        <div class="signature" style="margin-top:40px; text-align:right; font-weight:bold;">
+          ___________________________<br>Authorized Signature
+        </div>
     `;
 
     document.getElementById("quotation").innerHTML = html;
