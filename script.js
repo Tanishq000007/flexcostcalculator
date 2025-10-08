@@ -23,7 +23,7 @@ function calculate() {
 
   const eyeletsChecked = document.getElementById("eyelets").checked;
   const addonsName = eyeletsChecked ? "Eyelets" : "None";
-  const addonsValue = 0; // Always zero
+  const addonsValue = 0;
 
   const designing = parseFloat(document.getElementById("designing").value || 0);
   const remark = document.getElementById("remark").value;
@@ -48,7 +48,7 @@ function calculate() {
   const today = new Date().toLocaleDateString();
 
   document.getElementById("quotation").innerHTML = `
-    <div id="pdfContent" style="width:100%; padding:0; margin:0; overflow: visible;">
+    <div id="pdfContent">
       <div style="display:flex; justify-content: space-between; align-items:center;">
         <h2>Quotation</h2>
         <img src="logo.png" alt="Logo" style="width:100px; height:auto;" />
@@ -72,7 +72,6 @@ function calculate() {
       </table>
 
       ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
-
       <p class="note">Note: Rates valid for 15 days from quotation date.</p>
 
       <div class="footer">
@@ -85,36 +84,4 @@ function calculate() {
       </div>
 
       <div class="signature">
-        ___________________________<br>
-        Authorized Signature
-      </div>
-    </div>
-  `;
-}
-
-function downloadPDF() {
-  const name = document.getElementById("customerName").value || "Customer";
-  const element = document.getElementById("pdfContent");
-
-  if (!element || !element.innerHTML.trim()) {
-    alert("Please calculate the quotation first!");
-    return;
-  }
-
-  setTimeout(() => {
-    const opt = {
-      margin: 10,
-      filename: `quotation-${name}.pdf`,
-      image: { type: 'png', quality: 1 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: true,
-        windowWidth: element.scrollWidth
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-  }, 500);
-}
+        ___________________________<br
