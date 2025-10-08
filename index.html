@@ -3,74 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vimal Press Quotation</title>
+  <title>Flex Printing Quotation Calculator</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
-    <h1>Vimal Press — Flex Printing Quotation</h1>
+    <h1>Flex Printing Quotation Calculator</h1>
+    <form id="quoteForm">
+      <label>Customer Name:</label>
+      <input type="text" id="customerName" required />
 
-    <label>Customer Name <input type="text" id="customerName" /></label>
-    <label>Date <input type="date" id="date" /></label>
+      <label>Width (in inches):</label>
+      <input type="number" id="width" required />
 
-    <div class="row">
-      <label>Width (ft) <input type="number" id="width" step="0.01" /></label>
-      <label>Height (ft) <input type="number" id="height" step="0.01" /></label>
-      <label>Quantity <input type="number" id="quantity" value="1" /></label>
-    </div>
+      <label>Height (in inches):</label>
+      <input type="number" id="height" required />
 
-    <label>Material
-      <select id="materialType">
-        <option>White Back</option>
-        <option>Black Back</option>
-        <option>White backside</option>
-        <option>Star</option>
-        <option>star backside</option>
-        <option>Back Light</option>
-        <option>vnyle</option>
-        <option>oneway</option>
-        <option>radium</option>
-        <option>sunboard</option>
-        <option>radium sunboard</option>
+      <label>Material:</label>
+      <select id="material">
+        <option value="5">White Back - ₹5</option>
+        <option value="10">Black Back - ₹10</option>
+        <option value="15">White Backside - ₹15</option>
+        <option value="20">Star - ₹20</option>
+        <option value="25">Star Backside - ₹25</option>
+        <option value="30">Back Light - ₹30</option>
+        <option value="35">Vinyl - ₹35</option>
+        <option value="40">Oneway - ₹40</option>
+        <option value="45">Radium - ₹45</option>
+        <option value="50">Sunboard - ₹50</option>
+        <option value="55">Radium Sunboard - ₹55</option>
+        <option value="90">Acrylic - ₹90</option>
       </select>
-    </label>
 
-    <label>Frame Type (optional)
-      <select id="frameType">
-        <option value="">None</option>
-        <option value="1kg">1kg</option>
-        <option value="2kg">2kg</option>
-        <option value="3kg">3kg</option>
+      <label>Frame:</label>
+      <select id="frame">
+        <option value="0">No Frame</option>
+        <option value="10">1kg - ₹10</option>
+        <option value="20">2kg - ₹20</option>
+        <option value="30">3kg - ₹30</option>
       </select>
-    </label>
 
-    <label><input type="checkbox" id="illet" /> Illets (complementary)</label>
+      <label>Add-ons:</label>
+      <select id="addons">
+        <option value="0">Illets (Free)</option>
+      </select>
 
-    <fieldset>
-      <legend>Lamination</legend>
-      <label><input type="radio" name="lam" value="none" checked /> None</label>
-      <label><input type="radio" name="lam" value="gloss" /> Gloss</label>
-      <label><input type="radio" name="lam" value="matte" /> Matte</label>
-    </fieldset>
+      <label>Lamination:</label><br />
+      <input type="checkbox" id="gloss" value="10" /> Gloss (₹10/sq inch)
+      <input type="checkbox" id="matte" value="12" /> Matte (₹12/sq inch)
+      <br /><br />
 
-    <label>Designing Charges (₹)
-      <input id="designingCharges" type="number" value="0" />
-    </label>
+      <label>Designing Charges (₹):</label>
+      <input type="number" id="designing" />
 
-    <label><input type="checkbox" id="gstCheck" /> Include GST 18%</label>
+      <label>Apply GST (18%)?</label>
+      <input type="checkbox" id="gst" />
 
-    <div class="buttons">
-      <button id="calcBtn">Calculate</button>
-      <button id="downloadPdfBtn" disabled>Download PDF</button>
-    </div>
+      <button type="button" id="calcBtn">Calculate</button>
+      <button type="button" id="downloadPdfBtn">Download PDF</button>
+    </form>
 
-    <div id="quotationResult" class="result"></div>
+    <div id="quotation" class="quotation"></div>
   </div>
 
-  <!-- Required libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
