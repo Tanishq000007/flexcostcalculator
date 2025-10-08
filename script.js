@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
 });
 
+let currentCustomerName = "quotation"; // default
+
 function calculate() {
   const name = document.getElementById("customerName").value.trim();
   const date = document.getElementById("quoteDate").value;
@@ -34,6 +36,8 @@ function calculate() {
     return;
   }
 
+  currentCustomerName = name.replace(/\s+/g, "_"); // for filename
+
   const area = width * height;
   const materialCost = area * materialValue;
   const frameCost = area * frameValue;
@@ -41,7 +45,7 @@ function calculate() {
   const subtotal = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
   const quoteHTML = `
-    <div id="pdfContent" style="padding:10px;">
+    <div id="pdfContent" style="padding:10px; background:#fff; color:#000;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Quotation</h2>
         <img src="logo.png" alt="Logo" style="width:100px; height:auto;">
@@ -52,20 +56,20 @@ function calculate() {
       <p><strong>Size:</strong> ${width}" × ${height}" (${area.toFixed(0)} sq.in)</p>
       <p><strong>Quantity:</strong> ${quantity}</p>
 
-      <table>
-        <tr><th>Description</th><th>Amount (₹)</th></tr>
-        <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
-        <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
+      <table style="width:100%; border-collapse: collapse;">
+        <tr><th style="border:1px solid #000; padding:5px;">Description</th><th style="border:1px solid #000; padding:5px;">Amount (₹)</th></tr>
+        <tr><td style="border:1px solid #000; padding:5px;">Material (${materialName})</td><td style="border:1px solid #000; padding:5px;">${(materialCost*quantity).toFixed(2)}</td></tr>
+        <tr><td style="border:1px solid #000; padding:5px;">Frame (${frameName})</td><td style="border:1px solid #000; padding:5px;">${(frameCost*quantity).toFixed(2)}</td></tr>
+        <tr><td style="border:1px solid #000; padding:5px;">Lamination (${laminationName})</td><td style="border:1px solid #000; padding:5px;">${(laminationCost*quantity).toFixed(2)}</td></tr>
+        <tr><td style="border:1px solid #000; padding:5px;">Add-ons (${addonsName})</td><td style="border:1px solid #000; padding:5px;">${(addonsValue*quantity).toFixed(2)}</td></tr>
+        <tr><td style="border:1px solid #000; padding:5px;">Designing Charges</td><td style="border:1px solid #000; padding:5px;">${(designing*quantity).toFixed(2)}</td></tr>
+        <tr><td style="border:1px solid #000; padding:5px;"><strong>Total</strong></td><td style="border:1px solid #000; padding:5px;"><strong>${subtotal.toFixed(2)}</strong></td></tr>
       </table>
 
       ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
       <p style="font-style:italic; margin-top:10px;">Note: Rates valid for 15 days from quotation date.</p>
 
-      <div class="footer">
+      <div class="footer" style="margin-top:20px; font-size:14px;">
         <strong>Contact:</strong><br>
         Sumit Mittal, Namit Mittal<br>
         9368885855, 9359995855<br>
@@ -73,7 +77,7 @@ function calculate() {
         vimalpress.com
       </div>
 
-      <div class="signature">
+      <div class="signature" style="margin-top:40px; text-align:right; font-weight:bold;">
         ___________________________<br>Authorized Signature
       </div>
     </div>
@@ -91,9 +95,8 @@ function downloadPDF() {
 
   html2pdf().set({
     margin: 10,
-    filename: `quotation.pdf`,
-    html2canvas: { scale: 2, useCORS: true },
+    filename: `${currentCustomerName}.pdf`,
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#fff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   }).from(element).save();
 }
-
