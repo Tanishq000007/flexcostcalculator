@@ -17,7 +17,8 @@ function getNumber(id) {
   return isNaN(val) || val < 0 ? 0 : val;
 }
 
-// Calculate quotat
+// Calculate quotation
+function calculate() {
   const name = document.getElementById("customerName").value.trim();
   const date = document.getElementById("quoteDate").value;
   const width = getNumber("width");
