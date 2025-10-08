@@ -1,9 +1,7 @@
 // Event listener for Calculate button
 document.getElementById("calcBtn").addEventListener("click", calculate);
 
-let currentCustomerName = "quotation"; // default
-
-// Safe number parser, handles checkboxes too
+// Safe number parser
 function getNumber(id) {
   const element = document.getElementById(id);
   if (!element) return 0;
@@ -47,8 +45,6 @@ function calculate() {
     alert("Please fill all required fields with valid numbers!");
     return;
   }
-
-  currentCustomerName = name.replace(/[^\w]/g, "_");
 
   const area = width * height;
   const materialCost = area * materialValue;
