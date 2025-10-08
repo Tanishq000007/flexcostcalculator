@@ -23,7 +23,7 @@ function calculate() {
 
   const eyeletsChecked = document.getElementById("eyelets").checked;
   const addonsName = eyeletsChecked ? "Eyelets" : "None";
-  const addonsValue = eyeletsChecked ? 0 : 0;
+  const addonsValue = 0; // Always zero
 
   const designing = parseFloat(document.getElementById("designing").value || 0);
   const remark = document.getElementById("remark").value;
@@ -48,13 +48,17 @@ function calculate() {
   const today = new Date().toLocaleDateString();
 
   document.getElementById("quotation").innerHTML = `
-    <div id="pdfContent">
-      <img src="logo.png" class="logo" alt="Logo" />
-      <h2>Quotation</h2>
+    <div id="pdfContent" style="width:100%; padding:0; margin:0; overflow: visible;">
+      <div style="display:flex; justify-content: space-between; align-items:center;">
+        <h2>Quotation</h2>
+        <img src="logo.png" alt="Logo" style="width:100px; height:auto;" />
+      </div>
+
       <p><strong>Customer:</strong> ${name}</p>
       <p><strong>Date:</strong> ${today}</p>
       <p><strong>Size:</strong> ${width}" × ${height}" (${areaSqInch.toFixed(0)} sq.in)</p>
       <p><strong>Quantity:</strong> ${quantity}</p>
+
       <table>
         <tr><th>Description</th><th>Amount (₹)</th></tr>
         <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
@@ -66,8 +70,11 @@ function calculate() {
         ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
         <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
       </table>
+
       ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
+
       <p class="note">Note: Rates valid for 15 days from quotation date.</p>
+
       <div class="footer">
         <strong>Contact:</strong><br>
         Sumit Mittal, Namit Mittal<br>
@@ -76,6 +83,7 @@ function calculate() {
         vimalpress.com<br>
         <br>Thank you for choosing us!
       </div>
+
       <div class="signature">
         ___________________________<br>
         Authorized Signature
@@ -97,9 +105,15 @@ function downloadPDF() {
     const opt = {
       margin: 10,
       filename: `quotation-${name}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      image: { type: 'png', quality: 1 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: true,
+        windowWidth: element.scrollWidth
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
   }, 500);
