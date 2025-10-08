@@ -9,7 +9,6 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     let materialValue = parseFloat(materialDropdown.value);
     const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
 
-    // Update Black Back rate
     if(materialName.includes("Black Back")) materialValue = 0.83;
 
     const frameDropdown = document.getElementById("frame");
@@ -21,7 +20,7 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const laminationName = laminationDropdown.options[laminationDropdown.selectedIndex].text;
 
     const eyeletsChecked = document.getElementById("eyelets").checked;
-    const addonsValue = 0; // Eyelets are free
+    const addonsValue = 0; // eyelets free
     const addonsName = eyeletsChecked ? "Eyelets" : "None";
 
     const designing = parseFloat(document.getElementById("designing").value) || 0;
@@ -37,23 +36,29 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const frameCost = area * frameValue;
     const laminationCost = area * laminationValue;
 
+    // Designing charges affected by quantity
     const total = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
-    let html = `
-        <h2>Quotation</h2>
+    const quoteHTML = `
+      <div id="pdfContent" style="padding:10px; background:#fff; color:#000;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2>Quotation</h2>
+          <img src="logo.png" alt="Logo" style="width:100px; height:auto;">
+        </div>
+
         <p><strong>Customer:</strong> ${name}</p>
         <p><strong>Date:</strong> ${date}</p>
         <p><strong>Size:</strong> ${width}" × ${height}" (${area.toFixed(0)} sq.in)</p>
         <p><strong>Quantity:</strong> ${quantity}</p>
 
         <table style="width:100%; border-collapse: collapse;" border="1">
-        <tr><th>Description</th><th>Amount (₹)</th></tr>
-        <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
-        <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
-        <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>${total.toFixed(2)}</strong></td></tr>
+          <tr><th>Description</th><th>Amount (₹)</th></tr>
+          <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
+          <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
+          <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
+          <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
+          <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>${total.toFixed(2)}</strong></td></tr>
         </table>
 
         ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
@@ -71,7 +76,9 @@ document.getElementById("calcBtn").addEventListener("click", function() {
         <div class="signature" style="margin-top:40px; text-align:right; font-weight:bold;">
           ___________________________<br>Authorized Signature
         </div>
+      </div>
     `;
 
-    document.getElementById("quotation").innerHTML = html;
+    document.getElementById("quotation").innerHTML = quoteHTML;
 });
+
