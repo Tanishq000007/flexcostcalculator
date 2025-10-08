@@ -45,6 +45,8 @@ button {
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
+  border: none;
+  transition: 0.3s;
 }
 
 button:hover {
