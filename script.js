@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function calculate() {
-  const name = document.getElementById("customerName").value;
+  const name = document.getElementById("customerName").value.trim();
+  const date = document.getElementById("quoteDate").value;
   const width = parseFloat(document.getElementById("width").value);
   const height = parseFloat(document.getElementById("height").value);
   const quantity = parseInt(document.getElementById("quantity").value || 1);
@@ -27,35 +28,28 @@ function calculate() {
 
   const designing = parseFloat(document.getElementById("designing").value || 0);
   const remark = document.getElementById("remark").value;
-  const gstChecked = document.getElementById("gst").checked;
 
-  if (!width || !height) {
-    alert("Please enter valid width and height");
+  if (!name || !date || !width || !height) {
+    alert("Please fill all required fields!");
     return;
   }
 
-  const areaSqInch = width * height;
-  const materialCost = areaSqInch * materialValue;
-  const frameCost = areaSqInch * frameValue;
-  const laminationCost = areaSqInch * laminationValue;
+  const area = width * height;
+  const materialCost = area * materialValue;
+  const frameCost = area * frameValue;
+  const laminationCost = area * laminationValue;
+  const subtotal = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
 
-  let singleTotal = materialCost + frameCost + laminationCost + addonsValue + designing;
-  let subtotal = singleTotal * quantity;
-  const gst = gstChecked ? subtotal * 0.18 : 0;
-  const total = subtotal + gst;
-
-  const today = new Date().toLocaleDateString();
-
-  document.getElementById("quotation").innerHTML = `
-    <div id="pdfContent">
-      <div style="display:flex; justify-content: space-between; align-items:center;">
+  const quoteHTML = `
+    <div id="pdfContent" style="padding:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Quotation</h2>
-        <img src="logo.png" alt="Logo" style="width:100px; height:auto;" />
+        <img src="logo.png" alt="Logo" style="width:100px; height:auto;">
       </div>
 
       <p><strong>Customer:</strong> ${name}</p>
-      <p><strong>Date:</strong> ${today}</p>
-      <p><strong>Size:</strong> ${width}" × ${height}" (${areaSqInch.toFixed(0)} sq.in)</p>
+      <p><strong>Date:</strong> ${date}</p>
+      <p><strong>Size:</strong> ${width}" × ${height}" (${area.toFixed(0)} sq.in)</p>
       <p><strong>Quantity:</strong> ${quantity}</p>
 
       <table>
@@ -65,46 +59,41 @@ function calculate() {
         <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
         <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
         <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td><strong>Subtotal</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
-        ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
-        <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
       </table>
 
-      ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
-      <p class="note">Note: Rates valid for 15 days from quotation date.</p>
+      ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
+      <p style="font-style:italic; margin-top:10px;">Note: Rates valid for 15 days from quotation date.</p>
 
       <div class="footer">
         <strong>Contact:</strong><br>
         Sumit Mittal, Namit Mittal<br>
         9368885855, 9359995855<br>
         vimalpress@gmail.com<br>
-        vimalpress.com<br>
-        <br>Thank you for choosing us!
+        vimalpress.com
       </div>
 
       <div class="signature">
-        ___________________________<br>
-        Authorized Signature
+        ___________________________<br>Authorized Signature
       </div>
     </div>
   `;
+
+  document.getElementById("quotation").innerHTML = quoteHTML;
 }
 
 function downloadPDF() {
-  const name = document.getElementById("customerName").value || "Customer";
   const element = document.getElementById("pdfContent");
-
   if (!element || !element.innerHTML.trim()) {
     alert("Please calculate the quotation first!");
     return;
   }
 
-  const opt = {
+  html2pdf().set({
     margin: 10,
-    filename: `quotation-${name}.pdf`,
-    image: { type: 'png', quality: 1 },
-    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
+    filename: `quotation.pdf`,
+    html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(element).save();
+  }).from(element).save();
 }
+
