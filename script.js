@@ -7,16 +7,27 @@ function calculate() {
   const name = document.getElementById("customerName").value;
   const width = parseFloat(document.getElementById("width").value);
   const height = parseFloat(document.getElementById("height").value);
+  const quantity = parseInt(document.getElementById("quantity").value || 1);
+
   const materialDropdown = document.getElementById("material");
   const materialValue = parseFloat(materialDropdown.value);
   const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
-  const frame = parseFloat(document.getElementById("frame").value);
-  const addons = parseFloat(document.getElementById("addons").value);
-  const designing = parseFloat(document.getElementById("designing").value || 0);
-  const gstChecked = document.getElementById("gst").checked;
 
-  const gloss = document.getElementById("gloss").checked ? 10 : 0;
-  const matte = document.getElementById("matte").checked ? 12 : 0;
+  const frameDropdown = document.getElementById("frame");
+  const frameValue = parseFloat(frameDropdown.value);
+  const frameName = frameDropdown.options[frameDropdown.selectedIndex].text;
+
+  const laminationDropdown = document.getElementById("lamination");
+  const laminationValue = parseFloat(laminationDropdown.value);
+  const laminationName = laminationDropdown.options[laminationDropdown.selectedIndex].text;
+
+  const eyeletsChecked = document.getElementById("eyelets").checked;
+  const addonsName = eyeletsChecked ? "Eyelets" : "None";
+  const addonsValue = eyeletsChecked ? 0 : 0;
+
+  const designing = parseFloat(document.getElementById("designing").value || 0);
+  const remark = document.getElementById("remark").value;
+  const gstChecked = document.getElementById("gst").checked;
 
   if (!width || !height) {
     alert("Please enter valid width and height");
@@ -26,12 +37,11 @@ function calculate() {
   const areaSqInch = width * height;
 
   const materialCost = areaSqInch * materialValue;
-  const frameCost = areaSqInch * frame;
-  const laminationCostPerInch = gloss || matte;
-  const laminationCost = areaSqInch * laminationCostPerInch;
-  const addonsCost = addons;
+  const frameCost = areaSqInch * frameValue;
+  const laminationCost = areaSqInch * laminationValue;
 
-  const subtotal = materialCost + frameCost + laminationCost + addonsCost + designing;
+  let singleTotal = materialCost + frameCost + laminationCost + addonsValue + designing;
+  let subtotal = singleTotal * quantity;
   const gst = gstChecked ? subtotal * 0.18 : 0;
   const total = subtotal + gst;
 
@@ -43,17 +53,20 @@ function calculate() {
     <p><strong>Customer:</strong> ${name}</p>
     <p><strong>Date:</strong> ${today}</p>
     <p><strong>Size:</strong> ${width}" × ${height}" (${areaSqInch.toFixed(0)} sq.in)</p>
+    <p><strong>Quantity:</strong> ${quantity}</p>
     <table>
       <tr><th>Description</th><th>Amount (₹)</th></tr>
-      <tr><td>Material (${materialName})</td><td>${materialCost.toFixed(2)}</td></tr>
-      <tr><td>Frame</td><td>${frameCost.toFixed(2)}</td></tr>
-      <tr><td>Lamination</td><td>${laminationCost.toFixed(2)}</td></tr>
-      <tr><td>Add-ons</td><td>${addonsCost.toFixed(2)}</td></tr>
-      <tr><td>Designing Charges</td><td>${designing.toFixed(2)}</td></tr>
+      <tr><td>Material (${materialName})</td><td>${(materialCost*quantity).toFixed(2)}</td></tr>
+      <tr><td>Frame (${frameName})</td><td>${(frameCost*quantity).toFixed(2)}</td></tr>
+      <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
+      <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
+      <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
       <tr><td><strong>Subtotal</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
       ${gstChecked ? `<tr><td>GST (18%)</td><td>${gst.toFixed(2)}</td></tr>` : ""}
       <tr><td><strong>Total</strong></td><td><strong>₹${total.toFixed(2)}</strong></td></tr>
     </table>
+
+    ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ""}
 
     <p class="note">Note: Rates valid for 15 days from quotation date.</p>
 
