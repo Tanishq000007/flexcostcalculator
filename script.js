@@ -43,6 +43,7 @@ function calculate() {
   let subtotal = singleTotal * quantity;
   const gst = gstChecked ? subtotal * 0.18 : 0;
   const total = subtotal + gst;
+
   const today = new Date().toLocaleDateString();
 
   document.getElementById("quotation").innerHTML = `
