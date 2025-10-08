@@ -17,10 +17,10 @@
     <input type="date" id="quoteDate" required>
 
     <label>Width (in inches):</label>
-    <input type="number" id="width" required>
+    <input type="number" id="width" required min="1">
 
     <label>Height (in inches):</label>
-    <input type="number" id="height" required>
+    <input type="number" id="height" required min="1">
 
     <label>Quantity:</label>
     <input type="number" id="quantity" value="1" min="1">
@@ -55,10 +55,10 @@
     </select>
 
     <label>Add-ons:</label><br />
-    <input type="checkbox" id="eyelets" value="0" /> Eyelets (Free)<br /><br />
+    <input type="checkbox" id="eyelets" value="10" /> Eyelets (₹10/sq in)<br /><br />
 
     <label>Designing Charges (₹):</label>
-    <input type="number" id="designing">
+    <input type="number" id="designing" min="0" value="0">
 
     <label>Remark:</label>
     <textarea id="remark" placeholder="Enter any remark for the quotation"></textarea>
