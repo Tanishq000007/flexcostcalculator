@@ -6,8 +6,11 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const quantity = parseInt(document.getElementById("quantity").value) || 1;
 
     const materialDropdown = document.getElementById("material");
-    const materialValue = parseFloat(materialDropdown.value);
+    let materialValue = parseFloat(materialDropdown.value);
     const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
+
+    // Update Black Back rate
+    if(materialName.includes("Black Back")) materialValue = 0.83;
 
     const frameDropdown = document.getElementById("frame");
     const frameValue = parseFloat(frameDropdown.value);
@@ -21,8 +24,7 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const addonsValue = 0; // Eyelets are free
     const addonsName = eyeletsChecked ? "Eyelets" : "None";
 
-    const designing = parseFloat(document.getElementById("designing").value) || 0;
-    const remark = document.getElementById("remark").value;
+    let designing = parseFloat(document.getElementById("designing").value) || 0;
 
     if(!name || !date || width <= 0 || height <=0){
         alert("Please fill all required fields with valid numbers!");
@@ -33,7 +35,10 @@ document.getElementById("calcBtn").addEventListener("click", function() {
     const materialCost = area * materialValue;
     const frameCost = area * frameValue;
     const laminationCost = area * laminationValue;
-    const subtotal = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
+    const subtotalPerBanner = materialCost + frameCost + laminationCost + addonsValue + designing;
+    
+    // Now designing charges are multiplied by quantity
+    const total = (materialCost + frameCost + laminationCost + addonsValue) * quantity + (designing * quantity);
 
     let html = `
         <h2>Quotation</h2>
@@ -49,10 +54,10 @@ document.getElementById("calcBtn").addEventListener("click", function() {
         <tr><td>Lamination (${laminationName})</td><td>${(laminationCost*quantity).toFixed(2)}</td></tr>
         <tr><td>Add-ons (${addonsName})</td><td>${(addonsValue*quantity).toFixed(2)}</td></tr>
         <tr><td>Designing Charges</td><td>${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>${subtotal.toFixed(2)}</strong></td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>${total.toFixed(2)}</strong></td></tr>
         </table>
 
-        ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
+        ${document.getElementById("remark").value ? `<p><strong>Remark:</strong> ${document.getElementById("remark").value}</p>` : ''}
     `;
 
     document.getElementById("quotation").innerHTML = html;
