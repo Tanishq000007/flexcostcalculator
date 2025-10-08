@@ -1,102 +1,90 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("calcBtn").addEventListener("click", calculate);
-  document.getElementById("downloadPdfBtn").addEventListener("click", downloadPDF);
-});
-
-let currentCustomerName = "quotation"; // default
-
-function calculate() {
-  const name = document.getElementById("customerName").value.trim();
-  const date = document.getElementById("quoteDate").value;
-  const width = parseFloat(document.getElementById("width").value);
-  const height = parseFloat(document.getElementById("height").value);
-  const quantity = parseInt(document.getElementById("quantity").value || 1);
-
-  const materialDropdown = document.getElementById("material");
-  const materialValue = parseFloat(materialDropdown.value);
-  const materialName = materialDropdown.options[materialDropdown.selectedIndex].text;
-
-  const frameDropdown = document.getElementById("frame");
-  const frameValue = parseFloat(frameDropdown.value);
-  const frameName = frameDropdown.options[frameDropdown.selectedIndex].text;
-
-  const laminationDropdown = document.getElementById("lamination");
-  const laminationValue = parseFloat(laminationDropdown.value);
-  const laminationName = laminationDropdown.options[laminationDropdown.selectedIndex].text;
-
-  const eyeletsChecked = document.getElementById("eyelets").checked;
-  const addonsName = eyeletsChecked ? "Eyelets" : "None";
-  const addonsValue = 0;
-
-  const designing = parseFloat(document.getElementById("designing").value || 0);
-  const remark = document.getElementById("remark").value;
-
-  if (!name || !date || !width || !height) {
-    alert("Please fill all required fields!");
-    return;
-  }
-
-  currentCustomerName = name.replace(/\s+/g, "_"); // for filename
-
-  const area = width * height;
-  const materialCost = area * materialValue;
-  const frameCost = area * frameValue;
-  const laminationCost = area * laminationValue;
-  const subtotal = (materialCost + frameCost + laminationCost + addonsValue + designing) * quantity;
-
-  const quoteHTML = `
-    <div id="pdfContent" style="padding:10px; background:#fff; color:#000;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2>Quotation</h2>
-        <img src="logo.png" alt="Logo" style="width:100px; height:auto;">
-      </div>
-
-      <p><strong>Customer:</strong> ${name}</p>
-      <p><strong>Date:</strong> ${date}</p>
-      <p><strong>Size:</strong> ${width}" × ${height}" (${area.toFixed(0)} sq.in)</p>
-      <p><strong>Quantity:</strong> ${quantity}</p>
-
-      <table style="width:100%; border-collapse: collapse;">
-        <tr><th style="border:1px solid #000; padding:5px;">Description</th><th style="border:1px solid #000; padding:5px;">Amount (₹)</th></tr>
-        <tr><td style="border:1px solid #000; padding:5px;">Material (${materialName})</td><td style="border:1px solid #000; padding:5px;">${(materialCost*quantity).toFixed(2)}</td></tr>
-        <tr><td style="border:1px solid #000; padding:5px;">Frame (${frameName})</td><td style="border:1px solid #000; padding:5px;">${(frameCost*quantity).toFixed(2)}</td></tr>
-        <tr><td style="border:1px solid #000; padding:5px;">Lamination (${laminationName})</td><td style="border:1px solid #000; padding:5px;">${(laminationCost*quantity).toFixed(2)}</td></tr>
-        <tr><td style="border:1px solid #000; padding:5px;">Add-ons (${addonsName})</td><td style="border:1px solid #000; padding:5px;">${(addonsValue*quantity).toFixed(2)}</td></tr>
-        <tr><td style="border:1px solid #000; padding:5px;">Designing Charges</td><td style="border:1px solid #000; padding:5px;">${(designing*quantity).toFixed(2)}</td></tr>
-        <tr><td style="border:1px solid #000; padding:5px;"><strong>Total</strong></td><td style="border:1px solid #000; padding:5px;"><strong>${subtotal.toFixed(2)}</strong></td></tr>
-      </table>
-
-      ${remark ? `<p><strong>Remark:</strong> ${remark}</p>` : ''}
-      <p style="font-style:italic; margin-top:10px;">Note: Rates valid for 15 days from quotation date.</p>
-
-      <div class="footer" style="margin-top:20px; font-size:14px;">
-        <strong>Contact:</strong><br>
-        Sumit Mittal, Namit Mittal<br>
-        9368885855, 9359995855<br>
-        vimalpress@gmail.com<br>
-        vimalpress.com
-      </div>
-
-      <div class="signature" style="margin-top:40px; text-align:right; font-weight:bold;">
-        ___________________________<br>Authorized Signature
-      </div>
-    </div>
-  `;
-
-  document.getElementById("quotation").innerHTML = quoteHTML;
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f3f4f6;
+  margin: 0;
+  padding: 0;
 }
 
-function downloadPDF() {
-  const element = document.getElementById("pdfContent");
-  if (!element || !element.innerHTML.trim()) {
-    alert("Please calculate the quotation first!");
-    return;
-  }
+.container {
+  max-width: 700px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin: 40px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-  html2pdf().set({
-    margin: 10,
-    filename: `${currentCustomerName}.pdf`,
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#fff' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(element).save();
+h1 {
+  text-align: center;
+  color: #222;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+
+input, select, textarea, button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  border: none;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.quotation {
+  margin-top: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.quotation table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.quotation th, .quotation td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.quotation th {
+  background: #007bff;
+  color: white;
+  text-align: left;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signature {
+  margin-top: 40px;
+  text-align: right;
+  font-weight: bold;
 }
