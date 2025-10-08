@@ -59,11 +59,6 @@ button:hover {
   background: #fafafa;
 }
 
-.logo {
-  float: right;
-  width: 100px;
-}
-
 .note {
   margin-top: 20px;
   font-style: italic;
@@ -113,6 +108,7 @@ table td:first-child {
   margin: 0;
   padding: 0;
   display: block;
-  position: relative;
   width: 100%;
+  position: relative;
+  overflow: visible;
 }
