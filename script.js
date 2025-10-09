@@ -82,7 +82,7 @@ function calculateQuotation() {
 
       <div class="footer" style="margin-top:20px; font-size:14px;">
         <strong>Contact:</strong><br>
-        Sumit Mittal, Namit Mittal<br>
+        VIMAL PRESS<br>
         9368885855, 9359995855<br>
         vimalpress@gmail.com<br>
         vimalpress.com
