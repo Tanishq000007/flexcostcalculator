@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("calcBtn").addEventListener("click", calculateQuotation);
   document.getElementById("printBtn").addEventListener("click", printQuotation);
@@ -36,6 +35,7 @@ function calculateQuotation() {
 
   const designing = parseFloat(document.getElementById("designing").value) || 0;
   const discount = parseFloat(document.getElementById("discount").value) || 0;
+  const gstRate = parseFloat(document.getElementById("gst").value) || 0;
   const remark = document.getElementById("remark").value;
 
   const area = width * height;
@@ -45,7 +45,9 @@ function calculateQuotation() {
   const addonsCost = area * addonsValue;
 
   const subtotal = (materialCost + frameCost + laminationCost + addonsCost) * quantity;
-  const total = subtotal - discount + designing;
+  const afterDiscount = subtotal - discount + designing;
+  const gstAmount = (afterDiscount * gstRate) / 100;
+  const total = afterDiscount + gstAmount;
   const rupee = "₹";
 
   const quoteHTML = `
@@ -70,6 +72,7 @@ function calculateQuotation() {
         <tr><td>Subtotal</td><td>${rupee}${subtotal.toFixed(2)}</td></tr>
         <tr><td>Discount</td><td>-${rupee}${discount.toFixed(2)}</td></tr>
         <tr><td>Designing Charges</td><td>${rupee}${designing.toFixed(2)}</td></tr>
+        <tr><td>GST (${gstRate}%)</td><td>${rupee}${gstAmount.toFixed(2)}</td></tr>
         <tr><td><strong>Total</strong></td><td><strong>${rupee}${total.toFixed(2)}</strong></td></tr>
       </table>
 
